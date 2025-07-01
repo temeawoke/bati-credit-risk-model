@@ -24,6 +24,14 @@ data/raw
 *.txt
 # Ignore all text files in data folder
 data/*.txt
+data/processed
+*.csv
+*.tsv
+*.xlsx
+*.json
+*.txt
+# Ignore all text files in data folder
+data/*.txt
 
 # Distribution / packaging
 .Python
