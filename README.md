@@ -63,3 +63,161 @@ cd credit-risk-model
 
 🛠️ Install Dependencies
 pip install -r requirements.txt
+
+
+
+Task 3 and 4
+
+# Credit Risk Probability Model using Alternative Data
+
+This project builds a machine learning pipeline to predict high-risk (proxy default) customers using transaction data without explicit credit risk labels. It simulates how alternative financial behavior can be used to assess creditworthiness.
+
+---
+
+## 📂 Project Structure
+
+# Generate a tree structure as a markdown-formatted string
+project_structure 
+
+credit-risk-model/
+├── .github/workflows/ci.yml   # For CI/CD
+├── data/                      # add this folder to .gitignore
+│   ├── raw/                   # Raw data goes here 
+│   └── processed/             # Processed data for training
+├── notebooks/
+│   └── 1.0-eda.ipynb          # Exploratory, one-off analysis
+├── src/
+│   ├── __init__.py
+│   ├── data_processing.py     # Script for feature engineering
+│   ├── train.py               # Script for model training
+│   ├── predict.py             # Script for inference
+│   └── api/
+│       ├── main.py            # FastAPI application
+│       └── pydantic_models.py # Pydantic models for API
+├── tests/
+│   └── test_data_processing.py # Unit tests
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .gitignore
+└── README.md
+
+
+# Append this structure to the README.md
+readme_path = "/mnt/data/README.md"
+with open(readme_path, "a", encoding="utf-8") as f:
+    f.write("\n## 📁 Project Structure\n")
+    f.write(project_structure)
+
+readme_path
+
+
+## 🎯 Objective
+
+* Build a pipeline to create a **proxy credit risk target** using behavioral clustering.
+* Engineer meaningful features from raw data.
+* Train and compare ML models.
+* Log experiments using **MLflow**.
+
+---
+
+## 🔍 Data Summary
+
+The dataset contains mobile money transaction logs with fields like:
+
+* `TransactionStartTime`
+* `CustomerId`
+* `Amount`
+* `ProductId`, `ChannelId`, etc.
+
+There is **no direct `credit_risk` or `default` column**, so we create one via clustering.
+
+---
+
+## ⚙️ Pipeline Overview
+
+### Task 3: Feature Engineering
+
+* Extract datetime features (hour, day, month, year)
+* Aggregate stats per `CustomerId`: total, mean, count, std of amount
+* One-hot encode categorical variables
+* Standardize numeric variables
+
+### Task 4: Proxy Target Engineering
+
+* Calculate RFM (Recency, Frequency, Monetary) per customer
+* Cluster customers with KMeans into 3 segments
+* Label lowest engagement group as `is_high_risk = 1`
+
+### Task 5: Model Training
+
+* Train & compare:
+
+  * Logistic Regression
+  * Random Forest
+* Hyperparameter tuning via `GridSearchCV`
+* Log metrics + artifacts with **MLflow**
+
+---
+
+## 📈 Run the Project
+
+### 1. Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Feature Engineering & Target Label Creation
+
+```python
+from src.data.feature_engineering import run_feature_engineering
+X, y = run_feature_engineering("data/raw/your_file.csv", "models/")
+```
+
+### 3. Train Models & Track Experiments
+
+
+python src/models/train_model.py
+
+
+### 4. View MLflow UI
+
+
+mlflow ui --port 5000
+
+
+Visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+
+
+## ✅ Requirements
+
+
+mlflow
+scikit-learn
+pandas
+numpy
+joblib
+pytest
+
+
+## 🧪 Testing
+
+
+pytest tests/
+
+
+
+
+## 📌 Notes
+
+* This is a **proxy modeling** setup — not for real-world credit scoring.
+* Ethical use of customer segmentation is critical.
+* Future work could include time-series modeling or model explainability (e.g. SHAP).
+
+
+## 👤 Author
+
+Temesgen Awoke — Built as part of 10 Academy Week 5 Challenge
+
